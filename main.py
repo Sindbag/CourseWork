@@ -68,8 +68,8 @@ def main_program():
         types_counter = [0, 0, 0, 0]  # 0 - none, 1 - line, 2 - circle, 3 - point
         for frame in press:
             # frame.detect_type()
-            print(expert_system_frame(frame))
             # types_counter[frame.detect_type()] += 1
+            pass
 
 
 if __name__ == '__main__':

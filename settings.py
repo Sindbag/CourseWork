@@ -1,8 +1,14 @@
 # file to read data from // TODO: move to argv system
+import math
+
 FILENAME = 'testfile.txt'
 
 # metric to be chosen
 METRIC_NUMBER = 0
+
+metrics_list = [
+    lambda x, y: math.sqrt(sum([(x.sensors[i] - y.sensors[i]) ** 2 for i in range(len(x.sensors))])),
+]
 
 # low edges to get inside Press
 LOW_SENSOR_BORDER = 20
