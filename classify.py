@@ -37,6 +37,7 @@ def expert_system_frame(frame):
 
 def detect_frame_type(frame):
     dists = expert_system_frame(frame)
+    print(dists)
     ans = dists[0]
     # TODO : clarify class
     not_sure = False

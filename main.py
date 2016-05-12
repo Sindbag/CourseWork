@@ -6,6 +6,11 @@ from settings import FILENAME, LOW_SENSOR_MISTAKE, LOW_SENSOR_BORDER, SENSOR_INF
 
 
 def read_data_part(f):
+    """
+    Read file and get frames from sensor's data
+    :param f: file to be read
+    :return: frames list
+    """
     output = []
     i = 0
     for i in range(SENSOR_INFO_SIZE * DATA_CHUNK_SIZE):

@@ -15,6 +15,17 @@ class TestFrameExpertSys(unittest.TestCase):
         pass
 
     def test_line(self):
+        # f = open("data_samples/19-40-15.txt", "r")
+        # i = 0
+        # for line in f.readlines():
+        #     if not i % 7 == 0:
+        #         i += 1
+        #         continue
+        #     fr = Frame(list(map(int, line.strip().split())))
+        #     print(detect_frame_type(fr))
+        #     self.assertEqual(detect_frame_type(fr), 1)
+        #     i += 1
+
         str1 = "    44    110    108    255    255    255    112     49    255" \
                "    255    255    101     67    255    255    255     28     83     66 "
         missed_high_press = Frame(list(map(int, str1.strip().split())))
@@ -38,6 +49,7 @@ class TestFrameExpertSys(unittest.TestCase):
         str5 = "    11     27     56     24     79    255     35     21     54" \
                "    255     95     14     22    255     73     18     16     24      8 "
         strict_high_press = Frame(list(map(int, str5.strip().split())))
+        strict_high_press.print_frame()
         self.assertEqual(detect_frame_type(strict_high_press), 1)
 
         str6 = "    50     54     23    255    255    227     28     57    212" \
@@ -48,10 +60,8 @@ class TestFrameExpertSys(unittest.TestCase):
         str7 = "    14     23     21     25     80     86     45     20    109" \
                "    255    255     42    176    135     93     29      9     21     12 "
         strict_high_press_3 = Frame(list(map(int, str7.strip().split())))
+        strict_high_press_3.print_frame()
         self.assertEqual(detect_frame_type(strict_high_press_3), 1)
-
-
-
 
 
 class TestPressExpertSys(unittest.TestCase):
