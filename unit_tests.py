@@ -1,5 +1,4 @@
 import unittest
-
 from data_classes import Frame, Press
 from classify import detect_frame_type, detect_press_type
 
@@ -9,7 +8,12 @@ class TestFrameExpertSys(unittest.TestCase):
     Test frame expert system to detect classes on corner-cases
     """
     def test_circle(self):
-        pass
+        circle_1 = "    63     62     40    130    255    255     76     89    255" \
+                   "    15    255     24    255    255    255    116    123    176     62 "
+        circle = Frame(list(map(int, circle_1.strip().split())))
+        print('\n')
+        circle.print_frame()
+        self.assertEqual(detect_frame_type(circle), 2)
 
     def test_point(self):
         pass
@@ -49,7 +53,7 @@ class TestFrameExpertSys(unittest.TestCase):
         str5 = "    11     27     56     24     79    255     35     21     54" \
                "    255     95     14     22    255     73     18     16     24      8 "
         strict_high_press = Frame(list(map(int, str5.strip().split())))
-        strict_high_press.print_frame()
+        # strict_high_press.print_frame()
         self.assertEqual(detect_frame_type(strict_high_press), 1)
 
         str6 = "    50     54     23    255    255    227     28     57    212" \
@@ -60,7 +64,7 @@ class TestFrameExpertSys(unittest.TestCase):
         str7 = "    14     23     21     25     80     86     45     20    109" \
                "    255    255     42    176    135     93     29      9     21     12 "
         strict_high_press_3 = Frame(list(map(int, str7.strip().split())))
-        strict_high_press_3.print_frame()
+        # strict_high_press_3.print_frame()
         self.assertEqual(detect_frame_type(strict_high_press_3), 1)
 
 

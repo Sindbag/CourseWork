@@ -1,50 +1,94 @@
-# file to read data from // TODO: move to argv system
-import math
-
-FILENAME = 'testfile.txt'
+# default file to read data from // TODO: move to argv system
+FILENAME = 'data_sensor/19-34-53.txt'
 
 # metric to be chosen
-METRIC_NUMBER = 1
+METRIC_NUMBER = 0
+METRIC_POWER = 2
 
 metrics_list = [
-    lambda x, y: math.sqrt(sum([(x.sensors[i] - y.sensors[i]) ** 2 for i in range(len(x.sensors))])),
-    lambda x, y: sum([abs(x.sensors[i] - y.sensors[i]) for i in range(len(x.sensors))]),
-    # lambda x, y: min([abs(x.sensors[i] - y.sensors[i]) for i in range(len(x.sensors))]),
-    # lambda x, y: max([abs(x.sensors[i] - y.sensors[i]) for i in range(len(x.sensors))])
-
+    lambda x, y: float(pow(sum(abs(x.sensors[i] - y.sensors[i]) ** METRIC_POWER for i in range(len(x.sensors))),
+                           1/METRIC_POWER)),
+    lambda x, y: min([abs(x.sensors[i] - y.sensors[i]) for i in range(len(x.sensors))]),
+    lambda x, y: max([abs(x.sensors[i] - y.sensors[i]) for i in range(len(x.sensors))])
 ]
 
-# low edges to get inside Press
+# low edges to get inside Press and to detect Frame type
 LOW_SENSOR_BORDER = 20
 LOW_SENSOR_MISTAKE = 10
 
+INSIDE_PRESS_RANGE = 30
+
 # count of SENSOR_INFO_SIZE to read by one attempt
-DATA_CHUNK_SIZE = 100
+DATA_CHUNK_SIZE = 300
 
 # size of one sensor reading (in lines)
 SENSOR_INFO_SIZE = 7
 
-# sensor's ideal frames in each class
-SENSOR_CIRCLE = [0, 0, 0,
-                 0, 255, 255, 0,
-                 0, 255, 0, 255, 0,
-                 0, 255, 255, 0,
-                 0, 0, 0]
+# sensor's ideal shapes with name and ideal frames
+SENSOR_CLASSES = [
+    {
+        'name': 'circle',
+        'meta': 'SENSOR_CIRCLE',
+        'centers_list': [
+            [0, 0, 0,
+             0, 255, 255, 0,
+             0, 255, 0, 255, 0,
+             0, 255, 255, 0,
+             0, 0, 0],
+            ]
+    },
 
-SENSOR_LINE_STRICT = [0, 0, 0,
-                      0, 255, 0, 0,
-                      0, 0, 255, 0, 0,
-                      0, 0, 255, 0,
-                      0, 0, 0]
+    {
+        'name': 'line',
+        'meta': 'SENSOR_LINE',
+        'centers_list': [
+            [0, 0, 0,
+             0, 255, 0, 0,
+             0, 0, 255, 0, 0,
+             0, 0, 255, 0,
+             0, 0, 0],
 
-SENSOR_LINE_MISSED = [0, 0, 0,
-                      0, 255, 255, 0,
-                      0, 0, 255, 0, 0,
-                      0, 255, 255, 0,
-                      0, 0, 0]
+            [0, 0, 0,
+             0, 255, 255, 0,
+             0, 0, 255, 0, 0,
+             0, 255, 255, 0,
+             0, 0, 0],
 
-SENSOR_POINT = [0, 0, 0,
-                0, 0, 0, 0,
-                0, 0, 255, 0, 0,
-                0, 0, 0, 0,
-                0, 0, 0]
+            [0, 255, 0,
+             0, 255, 255, 0,
+             0, 0, 255, 0, 0,
+             0, 255, 255, 0,
+             0, 255, 0],
+
+            [255, 255, 255,
+             0, 255, 255, 0,
+             0, 0, 255, 0, 0,
+             0, 255, 255, 0,
+             255, 255, 255],
+
+            # [0, 255, 0,
+            #  0, 255, 255, 0,
+            #  0, 255, 255, 255, 0,
+            #  0, 255, 255, 0,
+            #  0, 255, 0],
+
+            [255, 0, 0,
+             0, 255, 0, 0,
+             0, 0, 255, 0, 0,
+             0, 0, 255, 0,
+             0, 0, 255],
+            ]
+    },
+
+    {
+        'name': 'point',
+        'meta': 'SENSOR_POINT',
+        'centers_list': [
+            [0, 0, 0,
+             0, 0, 0, 0,
+             0, 0, 255, 0, 0,
+             0, 0, 0, 0,
+             0, 0, 0]
+            ]
+    }
+]

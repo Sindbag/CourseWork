@@ -1,68 +1,78 @@
-from data_classes import Frame
-from settings import SENSOR_POINT, SENSOR_CIRCLE, METRIC_NUMBER, SENSOR_LINE_STRICT, SENSOR_LINE_MISSED, metrics_list
+from data_classes import Frame, Shape
+from settings import SENSOR_CLASSES, METRIC_NUMBER, metrics_list, LOW_SENSOR_BORDER
 
 
-def expert_system_frame(frame):
+def get_min_dist(frame, centers=None, rotate=False):
+    if centers is None:
+        centers = [[0 for i in range(19)]]
+
+    dists = []
+
+    for center in centers:
+        cent_fr = Frame(center)
+        if rotate:
+            for i in range(6):
+                dists.append(metrics_list[METRIC_NUMBER](frame, cent_fr))
+                cent_fr.rotate_clock()
+        else:
+            dists.append(metrics_list[METRIC_NUMBER](frame, cent_fr))
+
+    return min(dists)
+
+
+def get_dists(frame):
     """
     Detect types by expert system.
     Algorithm: get distances from self-frame to ideal frames (in each class) and get the shortest distance.
     :param frame: sensor's data frame to be classified
     :return: sorted list of tuples (class, dist) of minimal distances to frame-classes' centers
     """
-    point, circle = Frame(SENSOR_POINT), Frame(SENSOR_CIRCLE)
+    dists = []
 
-    dist_point, dist_circle = map(lambda x: metrics_list[METRIC_NUMBER](frame, x), [point, circle])
+    for shape_raw in SENSOR_CLASSES:
+        shape = Shape(shape_raw)
+        dists.append((shape.name, get_min_dist(frame, shape.centers)))
 
-    strict_line, missed_line = Frame(SENSOR_LINE_STRICT), Frame(SENSOR_LINE_MISSED)
-    dists_strict_line, dists_missed_line = [], []
-
-    for i in range(4):
-        dists_strict_line.append(metrics_list[METRIC_NUMBER](frame, strict_line))
-        strict_line.rotate_center_clock()
-
-        dists_missed_line.append(metrics_list[METRIC_NUMBER](frame, missed_line))
-        missed_line.rotate_center_clock()
-
-    min_dist_strict_line, min_dist_missed_line = map(min, [dists_strict_line, dists_missed_line])
-
-    dists = [
-        ('point', dist_point),
-        ('circle', dist_circle),
-        ('strict_line', min_dist_strict_line),
-        ('missed_line', min_dist_missed_line)
-    ]
     dists.sort(key=lambda x: x[1])
     return dists
 
 
 def detect_frame_type(frame):
-    dists = expert_system_frame(frame)
-    print(dists)
+    dists = get_dists(frame)
     ans = dists[0]
-    # TODO : clarify class
-    not_sure = False
-    if ans[0] == 'point':
-        if not frame.sensor_max == frame.sensors[10]:
-            not_sure = True
-        frame_type = 3
-    elif ans[0] == 'circle':
-        if not (frame.sensors[10] < frame.sensors[5] and
-                frame.sensors[10] < frame.sensors[6] and
-                frame.sensors[10] < frame.sensors[9] and
-                frame.sensors[10] < frame.sensors[11] and
-                frame.sensors[10] < frame.sensors[14] and
-                frame.sensors[10] < frame.sensors[15]):
-            not_sure = True
-        frame_type = 2
-    else:
-        frame_type = 1
-    frame.set_type(frame_type)
-    return frame_type
+    frame.set_type(ans[0])
 
+    if dists[0][1]*1.2 > dists[1][1]:
+        frame.is_sure = False
 
-def expert_system_press(press):
-    pass
+    return frame.detected_type
 
 
 def detect_press_type(press):
-    pass
+    """
+    Detect press type by max frame classes
+    :param press: Press object
+    :return: detected press type
+    """
+    press.class_counts, press.class_not_sure = {}, {}
+    # previous_type = 'none'
+    for frame in press.frames:
+        if frame.sensor_max > LOW_SENSOR_BORDER:
+            frame_type = detect_frame_type(frame)
+            press.class_counts[frame_type] = \
+                press.class_counts.get(frame_type, 0) + 1
+
+            if not frame.is_sure:
+                press.class_not_sure[frame_type] = \
+                    press.class_not_sure.get(frame_type, 0) + 1
+            # previous_type = frame.detected_type
+    press_class_info = []
+
+    for sens_class, class_count in press.class_counts.items():
+        press_class_info.append((sens_class, class_count, press.class_not_sure.get(sens_class, 0)))
+
+    press_class_info.sort(key=lambda x: (x[1], x[2], x[0]))
+
+    press.detected_type = press_class_info[-1][0]
+
+    return press.detected_type
