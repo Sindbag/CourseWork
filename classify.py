@@ -1,8 +1,17 @@
+from collections import defaultdict
+
 from data_classes import Frame, Shape
-from settings import SENSOR_CLASSES, METRIC_NUMBER, metrics_list, LOW_SENSOR_BORDER
+from settings import SENSOR_CLASSES, METRIC_NUMBER, METRICS_LIST, LOW_SENSOR_BORDER
 
 
 def get_min_dist(frame, centers=None, rotate=False):
+    """
+    Calculates dists to centers and returns min value
+    :param frame: frame to be classified (Frame)
+    :param centers: list of ideal frame values (sensors) (list)
+    :param rotate: should centers be rotated for better distances (boolean)
+    :return: minimal distance to center
+    """
     if centers is None:
         centers = [[0 for i in range(19)]]
 
@@ -12,10 +21,10 @@ def get_min_dist(frame, centers=None, rotate=False):
         cent_fr = Frame(center)
         if rotate:
             for i in range(6):
-                dists.append(metrics_list[METRIC_NUMBER](frame, cent_fr))
+                dists.append(METRICS_LIST[METRIC_NUMBER](frame, cent_fr))
                 cent_fr.rotate_clock()
         else:
-            dists.append(metrics_list[METRIC_NUMBER](frame, cent_fr))
+            dists.append(METRICS_LIST[METRIC_NUMBER](frame, cent_fr))
 
     return min(dists)
 
@@ -23,7 +32,7 @@ def get_min_dist(frame, centers=None, rotate=False):
 def get_dists(frame):
     """
     Detect types by expert system.
-    Algorithm: get distances from self-frame to ideal frames (in each class) and get the shortest distance.
+    Algorithm: get distances from frame to ideal centers (in each class) and get the shortest distance.
     :param frame: sensor's data frame to be classified
     :return: sorted list of tuples (class, dist) of minimal distances to frame-classes' centers
     """
@@ -43,9 +52,9 @@ def detect_frame_type(frame):
     frame.set_type(ans[0])
 
     if dists[0][1]*1.2 > dists[1][1]:
-        frame.is_sure = False
+        frame.set_confidence(False)
 
-    return frame.detected_type
+    return frame.get_type()
 
 
 def detect_press_type(press):
@@ -54,25 +63,29 @@ def detect_press_type(press):
     :param press: Press object
     :return: detected press type
     """
-    press.class_counts, press.class_not_sure = {}, {}
-    # previous_type = 'none'
+    # TODO: detect by neighbours information
     for frame in press.frames:
         if frame.sensor_max > LOW_SENSOR_BORDER:
             frame_type = detect_frame_type(frame)
-            press.class_counts[frame_type] = \
-                press.class_counts.get(frame_type, 0) + 1
+            press.class_counts[frame_type] += 1
 
-            if not frame.is_sure:
-                press.class_not_sure[frame_type] = \
-                    press.class_not_sure.get(frame_type, 0) + 1
-            # previous_type = frame.detected_type
+            if not frame.is_confident():
+                press.class_not_sure[frame_type] += 1
+
     press_class_info = []
 
-    for sens_class, class_count in press.class_counts.items():
-        press_class_info.append((sens_class, class_count, press.class_not_sure.get(sens_class, 0)))
+    for sens_class, sens_class_count in press.class_counts.items():
+        press_class_info.append(
+            (
+                sens_class,
+                sens_class_count,
+                press.class_not_sure[sens_class]
+            )
+        )
 
     press_class_info.sort(key=lambda x: (x[1], x[2], x[0]))
+    final_type = press_class_info[-1]
+    press.set_type(final_type[0])
+    press.set_confidence(final_type[1] > 2*final_type[2])
 
-    press.detected_type = press_class_info[-1][0]
-
-    return press.detected_type
+    return press.get_type()
