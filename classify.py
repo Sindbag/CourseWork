@@ -1,7 +1,18 @@
-from collections import defaultdict
-
 from data_classes import Frame, Shape
-from settings import SENSOR_CLASSES, METRIC_NUMBER, METRICS_LIST, LOW_SENSOR_BORDER
+from settings import SENSOR_CLASSES, METRIC_NUMBER, METRICS_LIST, LOW_SENSOR_BORDER, OFF_SCALE_COUNT,\
+    FRAME_CONFIDENCE_PERCENT, PRESS_CONFIDENCE_PERCENT, OFF_SCALE_POINT
+
+
+def frame_valid(frame):
+    """
+    Frame validation function for more flexible frame selection
+    :param frame: frame to classify
+    :return: is frame valid? (boolean)
+    """
+    count = len([sens for sens in frame.sensors if sens >= OFF_SCALE_POINT])
+    if OFF_SCALE_COUNT <= count and LOW_SENSOR_BORDER >= frame.sensor_max:
+        return False
+    return True
 
 
 def get_min_dist(frame, centers=None, rotate=False):
@@ -40,7 +51,7 @@ def get_dists(frame):
 
     for shape_raw in SENSOR_CLASSES:
         shape = Shape(shape_raw)
-        dists.append((shape.name, get_min_dist(frame, shape.centers)))
+        dists.append((shape.name, get_min_dist(frame, shape.centers, shape.rotate)))
 
     dists.sort(key=lambda x: x[1])
     return dists
@@ -50,10 +61,8 @@ def detect_frame_type(frame):
     dists = get_dists(frame)
     ans = dists[0]
     frame.set_type(ans[0])
-
-    if dists[0][1]*1.2 > dists[1][1]:
+    if len(dists) > 1 and dists[0][1] * (1.0 + float(FRAME_CONFIDENCE_PERCENT) / 100.0) > dists[1][1]:
         frame.set_confidence(False)
-
     return frame.get_type()
 
 
@@ -65,7 +74,7 @@ def detect_press_type(press):
     """
     # TODO: detect by neighbours information
     for frame in press.frames:
-        if frame.sensor_max > LOW_SENSOR_BORDER:
+        if frame_valid(frame):
             frame_type = detect_frame_type(frame)
             press.class_counts[frame_type] += 1
 
@@ -86,6 +95,5 @@ def detect_press_type(press):
     press_class_info.sort(key=lambda x: (x[1], x[2], x[0]))
     final_type = press_class_info[-1]
     press.set_type(final_type[0])
-    press.set_confidence(final_type[1] > 2*final_type[2])
-
+    press.set_confidence((1.0 * final_type[1] * PRESS_CONFIDENCE_PERCENT / 100.0) > final_type[2])
     return press.get_type()

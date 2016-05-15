@@ -7,6 +7,7 @@ class Frame:
     Data frame from sensor
     """
     __new_id = itertools.count()
+    __last_id = 0
 
     def __init__(self, sens_list=None):
         if sens_list is None:
@@ -21,12 +22,18 @@ class Frame:
         else:
             self.sensor_min = min(tmp)
         self.__detected_type = 'none'
-        self._id = next(Frame.__new_id)
+        # self._id = next(Frame.__new_id)
+        self._id = Frame.__last_id
+        Frame.__last_id += 1
         self.dists = []
         self._is_sure = True
 
     def __repr__(self):
         return 'f#{}'.format(self._id)
+
+    @staticmethod
+    def null_id():
+        Frame.__last_id = 0
 
     def rotate_center_clock(self):
         tmp = self.sensors[4]
@@ -77,11 +84,11 @@ class Frame:
     def frame_str_format(self):
         return '\n'.join(
             [
-                '\t'.join(self.sensors[0:3]),
-                '\t'.join(self.sensors[3:7]),
-                '\t'.join(self.sensors[7:12]),
-                '\t'.join(self.sensors[12:16]),
-                '\t'.join(self.sensors[16:19])
+                '\t'.join(list(map(str, self.sensors[0:3]))),
+                '\t'.join(list(map(str, self.sensors[3:7]))),
+                '\t'.join(list(map(str, self.sensors[7:12]))),
+                '\t'.join(list(map(str, self.sensors[12:16]))),
+                '\t'.join(list(map(str, self.sensors[16:19])))
             ]
         )
 
@@ -112,7 +119,7 @@ class Frame:
     def __str__(self):
         return '\n'.join([
             'Frame #{}'.format(self.get_id()),
-            'Type: {} , {}'.format(self.get_type(), self.is_confident()),
+            'Type: {} , confident: {}'.format(self.get_type(), self.is_confident()),
             self.frame_str_format(),
         ])
 
@@ -182,10 +189,10 @@ class Shape:
     """
     Objects with their ideal frames
     """
-
     def __init__(self, shape_info):
         self.name = shape_info['name']
         self.centers = shape_info['centers_list']
+        self.rotate = shape_info.get('rotate', False)
 
     def __str__(self):
         return self.name

@@ -1,6 +1,7 @@
 import sys
 
 from classify import detect_press_type
+from data_classes import Frame
 from file_operations import read_presses
 from settings import FILENAME
 
@@ -27,8 +28,10 @@ def process_press(presses=None):
 def main_program():
     if len(sys.argv) > 1:
         for file in sys.argv[1:]:
+            Frame.null_id()
             f = open(file, 'r')
             presses = read_presses(f)
+            print('File: {}\n'.format(file))
             process_press(presses)
     else:
         f = open(FILENAME, 'r')

@@ -1,6 +1,7 @@
 import os
 from data_classes import Frame, Press
-from settings import LOW_SENSOR_MISTAKE, LOW_SENSOR_BORDER, SENSOR_INFO_SIZE, DATA_CHUNK_SIZE, CHECK_FRAMES_RANGE
+from settings import LOW_SENSOR_MISTAKE, LOW_SENSOR_BORDER, SENSOR_INFO_SIZE, DATA_CHUNK_SIZE, \
+    FRAMES_START_PRESS, FRAMES_STOP_PRESS
 
 
 def eof(file):
@@ -32,7 +33,7 @@ def is_press_ended(frames_list=None):
     """
     if frames_list is None:
         frames_list = []
-    max_sens = max([fr.sensor_max for fr in frames_list])
+    max_sens = max([fr.sensor_max for fr in frames_list[-FRAMES_STOP_PRESS:]])
     return max_sens < LOW_SENSOR_MISTAKE
 
 
@@ -43,7 +44,7 @@ def is_press_started(frames_list=None):
     """
     if frames_list is None:
         frames_list = []
-    min_sens = min([fr.sensor_max for fr in frames_list])
+    min_sens = min([fr.sensor_max for fr in frames_list[-FRAMES_START_PRESS:]])
     return min_sens > LOW_SENSOR_BORDER
 
 
@@ -56,7 +57,7 @@ def read_presses(file):
     presses_frame_list = []
     in_press = False
     # read data, while not EOF(file)
-    last_frames = [Frame() for x in range(CHECK_FRAMES_RANGE)]
+    last_frames = [Frame() for i in range(max(FRAMES_START_PRESS, FRAMES_STOP_PRESS))]
     while not eof(file):
         frames = read_data_part(file)
         for fr in frames:
