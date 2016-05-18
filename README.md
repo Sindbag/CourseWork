@@ -7,5 +7,6 @@ python press_classifier.py FILE1.txt [, FILE2.txt, ...]
 ## output:
 FILE1.txt
 
-Frame range: 10-150\n
+Frame range: 10-150
+
 Type: Circle, confidence: False
