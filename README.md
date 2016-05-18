@@ -10,3 +10,7 @@ FILE1.txt
 Frame range: 10-150
 
 Type: Circle, confidence: False
+
+## Options
+
+All settings could be changed in settings.py file
