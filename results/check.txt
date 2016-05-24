@@ -1,0 +1,127 @@
+Сравнение файлов before_adding.txt и AFTER_ADDING.TXT
+***** before_adding.txt
+Frames range: 29 - 183
+Press type: circle
+Is confident: False
+
+***** AFTER_ADDING.TXT
+Frames range: 29 - 183
+Press type: point
+Is confident: True
+
+*****
+
+***** before_adding.txt
+Frames range: 29 - 303
+Press type: point
+Is confident: True
+
+***** AFTER_ADDING.TXT
+Frames range: 29 - 303
+Press type: line
+Is confident: False
+
+*****
+
+***** before_adding.txt
+Frames range: 25 - 82
+Press type: circle
+Is confident: False
+***** AFTER_ADDING.TXT
+Frames range: 25 - 82
+Press type: line
+Is confident: False
+*****
+
+***** before_adding.txt
+Frames range: 67 - 589
+Press type: circle
+Is confident: False
+***** AFTER_ADDING.TXT
+Frames range: 67 - 589
+Press type: line
+Is confident: False
+*****
+
+***** before_adding.txt
+Frames range: 718 - 935
+Press type: point
+Is confident: True
+
+***** AFTER_ADDING.TXT
+Frames range: 718 - 935
+Press type: line
+Is confident: False
+
+*****
+
+***** before_adding.txt
+Frames range: 134 - 519
+Press type: circle
+Is confident: False
+***** AFTER_ADDING.TXT
+Frames range: 134 - 519
+Press type: line
+Is confident: False
+*****
+
+***** before_adding.txt
+Frames range: 61 - 135
+Press type: circle
+Is confident: False
+***** AFTER_ADDING.TXT
+Frames range: 61 - 135
+Press type: line
+Is confident: False
+*****
+
+***** before_adding.txt
+Frames range: 35 - 230
+Press type: circle
+Is confident: False
+***** AFTER_ADDING.TXT
+Frames range: 35 - 230
+Press type: line
+Is confident: False
+*****
+
+***** before_adding.txt
+Frames range: 20 - 72
+Press type: circle
+Is confident: False
+***** AFTER_ADDING.TXT
+Frames range: 20 - 72
+Press type: line
+Is confident: False
+*****
+
+***** before_adding.txt
+Frames range: 104 - 1298
+Press type: circle
+Is confident: False
+***** AFTER_ADDING.TXT
+Frames range: 104 - 1298
+Press type: line
+Is confident: False
+*****
+
+***** before_adding.txt
+Frames range: 55 - 246
+Press type: circle
+Is confident: False
+***** AFTER_ADDING.TXT
+Frames range: 55 - 246
+Press type: line
+Is confident: False
+*****
+
+***** before_adding.txt
+Frames range: 104 - 173
+Press type: circle
+Is confident: False
+***** AFTER_ADDING.TXT
+Frames range: 104 - 173
+Press type: line
+Is confident: False
+*****
+

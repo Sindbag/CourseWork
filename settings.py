@@ -9,8 +9,9 @@ SENSOR_INFO_SIZE = 7
 
 # metric to be chosen
 METRIC_NUMBER = 0
-METRIC_POWER = 2
+METRIC_POWER = 19
 
+# list of functions take 2 arguments (x, y) - frames, vector is frame.sensors
 METRICS_LIST = [
     lambda x, y: float(pow(sum(abs(x.sensors[i] - y.sensors[i]) ** METRIC_POWER for i in range(len(x.sensors))),
                            1.0 / METRIC_POWER)),
@@ -21,21 +22,21 @@ METRICS_LIST = [
 # percent of dists difference to be confident in classification
 FRAME_CONFIDENCE_PERCENT = 30
 # percent of non-confident frames in press for non-confident press classification
-PRESS_CONFIDENCE_PERCENT = 50
+PRESS_CONFIDENCE_PERCENT = 30
 
 # range to check sensors value to start and end Press
 FRAMES_START_PRESS = 20
 FRAMES_STOP_PRESS = 40
 
 # max sensors value to start Press
-LOW_SENSOR_BORDER = 30
+LOW_SENSOR_BORDER = 50
 
 # max sensors value to stop Press
 LOW_SENSOR_MISTAKE = 20
 
 # count of sensors to verify frame as overshoot
-OFF_SCALE_COUNT = 7
-OFF_SCALE_POINT = 255
+OFF_SCALE_COUNT = 9
+OFF_SCALE_POINT = 250
 
 # sensor's ideal shapes with name and ideal frames
 SENSOR_CLASSES = [
@@ -77,6 +78,12 @@ SENSOR_CLASSES = [
              0, 255, 255, 0,
              0, 255, 0],
 
+            [255, 0, 0,
+             0, 255, 0, 0,
+             0, 0, 255, 0, 0,
+             0, 0, 255, 0,
+             0, 0, 255],
+
             [255, 255, 255,
              0, 255, 255, 0,
              0, 0, 255, 0, 0,
@@ -88,12 +95,6 @@ SENSOR_CLASSES = [
             #  0, 200, 255, 200, 0,
             #  0, 230, 230, 0,
             #  0, 200, 0],
-
-            [255, 0, 0,
-             0, 255, 0, 0,
-             0, 0, 255, 0, 0,
-             0, 0, 255, 0,
-             0, 0, 255],
         ]
     },
 
@@ -108,5 +109,5 @@ SENSOR_CLASSES = [
              0, 0, 0, 0,
              0, 0, 0]
         ]
-    }
+    },
 ]

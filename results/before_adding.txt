@@ -1,0 +1,200 @@
+File: classified_data\circle.txt
+
+Frames range: 21 - 323
+Press type: circle
+Is confident: False
+
+File: classified_data\circle_high_many_over.txt
+
+Frames range: 74 - 1419
+Press type: circle
+Is confident: False
+
+File: classified_data\circle_high_pressure.txt
+
+Frames range: 26 - 109
+Press type: point
+Is confident: True
+
+File: classified_data\circle_one.txt
+
+Frames range: 20 - 86
+Press type: point
+Is confident: True
+
+File: classified_data\circle_or_line_not_sure.txt
+
+Frames range: 29 - 183
+Press type: circle
+Is confident: False
+
+File: classified_data\circle_overpressure.txt
+
+Frames range: 20 - 298
+Press type: circle
+Is confident: False
+
+File: classified_data\circle_separate_low_press.txt
+
+No frames detected
+File: classified_data\circle_very_high_pressure_fast.txt
+
+Frames range: 27 - 108
+Press type: point
+Is confident: True
+
+File: classified_data\line (2).txt
+
+Frames range: 29 - 303
+Press type: point
+Is confident: True
+
+File: classified_data\line (3).txt
+
+Frames range: 20 - 76
+Press type: line
+Is confident: True
+
+File: classified_data\line (4).txt
+
+Frames range: 20 - 193
+Press type: line
+Is confident: False
+
+File: classified_data\line-high-fast.txt
+
+Frames range: 25 - 82
+Press type: circle
+Is confident: False
+
+File: classified_data\line-to-circle.txt
+
+Frames range: 22 - 231
+Press type: line
+Is confident: False
+
+File: classified_data\line.txt
+
+Frames range: 21 - 102
+Press type: point
+Is confident: True
+
+File: classified_data\lines (2).txt
+
+Frames range: 67 - 589
+Press type: circle
+Is confident: False
+
+Frames range: 718 - 935
+Press type: point
+Is confident: True
+
+File: classified_data\lines.txt
+
+Frames range: 134 - 519
+Press type: circle
+Is confident: False
+
+File: classified_data\lines_not_sure.txt
+
+Frames range: 47 - 141
+Press type: line
+Is confident: False
+
+File: classified_data\line_dif-ang-high.txt
+
+Frames range: 61 - 135
+Press type: circle
+Is confident: False
+
+File: classified_data\line_dif-ang.txt
+
+Frames range: 84 - 340
+Press type: point
+Is confident: False
+
+File: classified_data\line_fast.txt
+
+No frames detected
+File: classified_data\line_hard.txt
+
+Frames range: 20 - 208
+Press type: line
+Is confident: False
+
+File: classified_data\line_hard_notsure.txt
+
+Frames range: 20 - 67
+Press type: point
+Is confident: True
+
+File: classified_data\line_high_dif-ang_fast_not-sure.txt
+
+Frames range: 35 - 230
+Press type: circle
+Is confident: False
+
+File: classified_data\line_high_fast.txt
+
+Frames range: 33 - 87
+Press type: point
+Is confident: True
+
+File: classified_data\line_high_pressure_no_entrance.txt
+
+Frames range: 20 - 72
+Press type: circle
+Is confident: False
+
+File: classified_data\line_many_high.txt
+
+Frames range: 104 - 1298
+Press type: circle
+Is confident: False
+
+File: classified_data\line_or_circle_hard.txt
+
+Frames range: 60 - 115
+Press type: circle
+Is confident: False
+
+File: classified_data\line_rotate.txt
+
+Frames range: 55 - 246
+Press type: circle
+Is confident: False
+
+File: classified_data\line_similar-to_circle.txt
+
+Frames range: 104 - 173
+Press type: circle
+Is confident: False
+
+File: classified_data\low_line_circle_lot-free-place.txt
+
+Frames range: 196 - 555
+Press type: point
+Is confident: True
+
+Frames range: 664 - 756
+Press type: point
+Is confident: True
+
+File: classified_data\point.txt
+
+Frames range: 65 - 214
+Press type: point
+Is confident: True
+
+File: classified_data\point_!notsure.txt
+
+Frames range: 20 - 68
+Press type: point
+Is confident: True
+
+File: classified_data\point_circle_overpress.txt
+
+Frames range: 162 - 374
+Press type: point
+Is confident: True
+

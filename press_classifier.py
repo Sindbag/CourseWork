@@ -1,3 +1,4 @@
+import os
 import sys
 
 from classify import detect_press_type
@@ -25,18 +26,26 @@ def process_press(presses=None):
         )
 
 
+def file_proceed(f):
+    if not f.endswith('.txt'):
+        print('{0} file is not supported (.txt expected)'.format(f))
+    Frame.null_id()
+    file = open(f, 'r')
+    presses = read_presses(file)
+    print('File: {}\n'.format(f))
+    process_press(presses)
+
+
 def main_program():
     if len(sys.argv) > 1:
         for file in sys.argv[1:]:
-            Frame.null_id()
-            f = open(file, 'r')
-            presses = read_presses(f)
-            print('File: {}\n'.format(file))
-            process_press(presses)
+            if os.path.isdir(file):
+                for f in [os.path.join(file, x) for x in os.listdir(file) if os.path.isfile(os.path.join(file, x))]:
+                    file_proceed(f)
+            else:
+                file_proceed(file)
     else:
-        f = open(FILENAME, 'r')
-        presses = read_presses(f)
-        process_press(presses)
+        file_proceed(FILENAME)
 
 
 if __name__ == '__main__':

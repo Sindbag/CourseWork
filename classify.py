@@ -3,6 +3,9 @@ from settings import SENSOR_CLASSES, METRIC_NUMBER, METRICS_LIST, LOW_SENSOR_BOR
     FRAME_CONFIDENCE_PERCENT, PRESS_CONFIDENCE_PERCENT, OFF_SCALE_POINT
 
 
+clusters = [Shape(row_sh) for row_sh in SENSOR_CLASSES]
+
+
 def frame_valid(frame):
     """
     Frame validation function for more flexible frame selection
@@ -24,12 +27,11 @@ def get_min_dist(frame, centers=None, rotate=False):
     :return: minimal distance to center
     """
     if centers is None:
-        centers = [[0 for i in range(19)]]
+        centers = [Frame([0 for i in range(19)])]
 
     dists = []
 
-    for center in centers:
-        cent_fr = Frame(center)
+    for cent_fr in centers:
         if rotate:
             for i in range(6):
                 dists.append(METRICS_LIST[METRIC_NUMBER](frame, cent_fr))
@@ -49,9 +51,8 @@ def get_dists(frame):
     """
     dists = []
 
-    for shape_raw in SENSOR_CLASSES:
-        shape = Shape(shape_raw)
-        dists.append((shape.name, get_min_dist(frame, shape.centers, shape.rotate)))
+    for shape in clusters:
+        dists.append((shape.name, get_min_dist(frame, shape.center_frames, shape.rotate)))
 
     dists.sort(key=lambda x: x[1])
     return dists
@@ -93,6 +94,8 @@ def detect_press_type(press):
         )
 
     press_class_info.sort(key=lambda x: (x[1], x[2], x[0]))
+    # print(press_class_info)
+
     final_type = press_class_info[-1]
     press.set_type(final_type[0])
     press.set_confidence((1.0 * final_type[1] * PRESS_CONFIDENCE_PERCENT / 100.0) > final_type[2])

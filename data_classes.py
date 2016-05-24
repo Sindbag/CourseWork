@@ -192,10 +192,11 @@ class Shape:
     def __init__(self, shape_info):
         self.name = shape_info['name']
         self.centers = shape_info['centers_list']
+        self.center_frames = list(map(Frame, self.centers))
         self.rotate = shape_info.get('rotate', False)
 
     def __str__(self):
-        return self.name
+        return 'Shape ' + self.name + '\n' + str(*self.center_frames)
 
     def __repr__(self):
         return self.name
